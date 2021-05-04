@@ -1,0 +1,28 @@
+{
+    "name": "dcolsay/laravel-xml",
+    "description": "Filemanager",
+    "authors": [
+        {
+            "name": "Boris DEHOUMON",
+            "email": "borisdehoumon@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "spatie/laravel-package-tools": "^1.6",
+        "illuminate/contracts": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dcolsay\\Xml\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dcolsay\\Xml\\XmlServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
