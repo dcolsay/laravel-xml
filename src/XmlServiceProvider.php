@@ -1,11 +1,11 @@
 <?php
 
-namespace Dcolsay\Xml;
+namespace Dcolsay\XML;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class XmlServiceProvider extends PackageServiceProvider
+class XMLServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
