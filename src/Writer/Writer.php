@@ -87,7 +87,8 @@ class Writer extends XMLWriter
 
     public function replace($element, $delimiter = '_')
     {
-        return Str::replace(" ", $delimiter, $element);
+        return Str::of($element)
+            ->replace(" ", $delimiter, $element);
     }
 
     public function output()
