@@ -24,4 +24,9 @@ class TestCase extends Orchestra
     {
         // perform environment setup
     }
+
+    public function getStubPath(string $name): string
+    {
+        return __DIR__."/stubs/{$name}";
+    }
 }

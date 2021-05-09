@@ -15,6 +15,8 @@ abstract class XMLStreamReader
     protected $streamer; 
 
     protected $filePath;
+
+    protected $options = [];
     
     public function __construct($path)
     {
