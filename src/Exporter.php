@@ -5,6 +5,7 @@ namespace Dcolsay\XML;
 use Dcolsay\XML\Writer\Writer;
 use Dcolsay\XML\Contracts\FromArray;
 use Illuminate\Support\Facades\Storage;
+use Dcolsay\XML\Contracts\WithMutipleRoots;
 
 class Exporter
 {
@@ -23,21 +24,50 @@ class Exporter
 
     public function export()
     {
-        if($this->exportable instanceof FromArray);
-            $this->fromArray($this->exportable->array(), $this->exportable->root);
-        //    $this->writer->setElement($this->exportable->root, $this->exportable->fromArray());
+        // Vérifier l'existance sinon mettre dans fichier de configuration
+        $this->writer->startElement($this->exportable->root);
+
+
+        if($this->exportable instanceof FromArray)
+            $this->fromArray($this->exportable->array());
+
+        if($this->exportable instanceof WithMutipleRoots){
+            $this->withMutipleRoots($this->exportable->roots());
+        }
 
         $this->save();
 
     }
 
-    protected function fromArray(array $elements, string $key)
+    // public function addNode($node, $elements)
+    // {
+    //     $this->writer->startElement($node)
+    //     $this
+    // }
+
+    protected function fromArray(array $elements)
     {
         collect($elements)->each(fn($element, $key) => $this->writer->setElement($key, $element));
+    }
+    
+    protected function fromArrayWithKey(array $elements, $key)
+    {
+        collect($elements)->each(fn($element) => $this->writer->setElement($key, $element));
+    }
+
+    protected function withMutipleRoots(array $roots)
+    {
+        foreach($roots as $root){
+            
+            if($root instanceof FromArray){
+                $this->fromArrayWithKey($root->array(), $root->root);
+            }
+        }
     }
 
     public function save()
     {
+        $this->writer->endElement();
         Storage::append('demo.xml', $this->writer->flush(true));
     }
 }

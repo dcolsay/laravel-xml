@@ -28,7 +28,6 @@ class XML
 
     public function store($export, $filePath = '', $diskName = 'local', $diskOptions = [])
     {
-        
         $temporaryFile = $this->export($export, $filePath);
 
         return true;

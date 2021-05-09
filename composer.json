@@ -13,10 +13,22 @@
         "illuminate/contracts": "^8.0",
         "prewk/xml-string-streamer": "^1.1"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^9.3",
+        "orchestra/testbench": "^6.15"
+    },
     "autoload": {
         "psr-4": {
             "Dcolsay\\XML\\": "src"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dcolsay\\XML\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     },
     "extra": {
         "laravel": {

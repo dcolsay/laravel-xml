@@ -28,6 +28,7 @@ abstract class XMLStreamReader
 
     public function getStream()
     {
+        // TODO : Vérifier si le $filePath n'est pas null
         return new File($this->filePath, $this->buffer);
     }
 
@@ -35,11 +36,16 @@ abstract class XMLStreamReader
     {
         $streamer = $this->getStreamer();
 
-        while($node = $streamer->getNode()) {
-            $element = new XMLElement($node);
+        return LazyCollection::make(function () use ($streamer, $callback) {
             
-            call_user_func($callback, $element, $node);
-        }
+            while($node = $streamer->getNode()) {
+                $element = new XMLElement($node);
+
+                yield call_user_func($callback, $element, $node);
+            }
+
+        });
+
     }
 
     protected function getStreamer()
@@ -49,15 +55,8 @@ abstract class XMLStreamReader
 
     public function getRows($options = null)
     {
-        return LazyCollection::make(function () {
-            
-            /*$streamer = $this->getStreamer();
-
-            while($node = $streamer->getNode()) {
-                $element = new XMLElement($node);
-                
-                yield $element;
-            }*/
+        return $this->parse(function($element){
+            return $element;
         });
     }
 

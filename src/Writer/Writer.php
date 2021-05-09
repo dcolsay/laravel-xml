@@ -67,7 +67,11 @@ class Writer extends XMLWriter
 
     protected function addArrayElement(string $element, array $values)
     {
-        $this->startElement($this->replace($element));
+        try {
+            $this->startElement($this->replace($element));
+        } catch (\Throwable $th) {
+           dd($element);
+        }
 
         foreach ($values as $key => $value)
         {
@@ -97,15 +101,5 @@ class Writer extends XMLWriter
         return $this->outputMemory();
 
 
-    }
-
-    public function export($export)
-    {
-        dd($export);
-    }
-
-    public function open($export)
-    {
-        // $this->exportable()
     }
 }
