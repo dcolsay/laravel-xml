@@ -2,13 +2,58 @@
 
 namespace Dcolsay\XML\Writer;
 
-use Illuminate\Support\Str;
 use XMLWriter;
+use Illuminate\Support\Str;
+use Dcolsay\XML\Writer\Concerns\HasNode;
 
 class Writer extends XMLWriter
 {
+    use HasNode;
+    
+    private XMLWriter $writer;
+
+    /** @var string Path to the output file */
+    protected $path = '';
 
     protected $version = '1.0';
+
+    public function __construct(string $path, string $type = 'xml')
+    {
+        $this->path = $path;
+
+        $this->writer = WriterFactory::createWriterFromFile($path);
+    }
+
+    # Creators
+
+    public static function create(string $file, callable $configureWiter = null)
+    {
+        $writer = new static($file);
+
+        $xmlWriter = $writer->getWriter();
+
+        if($configureWiter) {
+            $configureWiter($xmlWriter);
+        }
+
+        return $writer;
+    }
+
+    # Getters
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    public function getWriter(): XMLWriter
+    {
+        return $this->writer;
+    }
+
+    # Setters
+
+    
+
 
     public static function make()
     {
@@ -18,11 +63,6 @@ class Writer extends XMLWriter
         $writer->pretty();
 
         return $writer;
-    }
-
-    public function makeFromFile($file)
-    {
-        # code...
     }
 
     public function setElement(string $element, $value)
@@ -43,12 +83,9 @@ class Writer extends XMLWriter
 
     public function pretty()
     {
-        $this->setIndent(true);
-    }
-
-    public function setArrayElement(string $element, array $values)
-    {
-        # code...
+        $this->writer->setIndent(true);
+        
+        return $this;
     }
 
     public function setTextElement(string $element, string $value)
@@ -93,13 +130,5 @@ class Writer extends XMLWriter
     {
         return Str::of($element)
             ->replace(" ", $delimiter, $element);
-    }
-
-    public function output()
-    {
-        // Cas avec l'ouverture de la memory
-        return $this->outputMemory();
-
-
     }
 }
