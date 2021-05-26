@@ -23,7 +23,8 @@ class WriterTest extends TestCase
     /** @test */
     public function it_can_write_a_regular_xml()
     {
-        Writer::create($this->pathToCsv)
+        $path = $this->temporaryDirectory->path('test_regular.xml');
+        Writer::create($path)
             ->addNode('demo', 'Good')
             ->addNode('demo', 'Good');
             // ->addRow([
@@ -47,6 +48,57 @@ class WriterTest extends TestCase
             ->pretty()
             ->addNode('demo', 'Good')
             ->addNode('demo', 'Good');
+
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function it_can_write_array_node()
+    {
+        $path = $this->temporaryDirectory->path('test_array_node.xml');
+        Writer::create($path)
+            ->pretty()
+            ->addNode('demo', [
+                'Good guy' => [
+    
+                    'name' => 'Luke Skywalker',
+                    'weapon' => 'Lightsaber',
+    
+                ],
+                'Bad guy' => [
+                    'name' => 'Sauron',
+                    'weapon' => 'Evil Eye',
+    
+                ],
+
+                'Good Girl' => 'Laula'
+            ]);
+
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function it_can_write_mutiple_node()
+    {
+        $path = $this->temporaryDirectory->path('test_mutiple_node.xml');
+        Writer::create($path)
+            ->pretty()
+            ->addNode('demo', [
+                'Good guy' => [
+    
+                    'name' => 'Luke Skywalker',
+                    'weapon' => 'Lightsaber',
+    
+                ],
+                'Bad guy' => [
+                    'name' => 'Sauron',
+                    'weapon' => 'Evil Eye',
+    
+                ],
+
+                'Good Girl' => 'Laula'
+            ])
+            ->addNode('Bad Girl', 'Jane');
 
         $this->assertTrue(true);
     }
