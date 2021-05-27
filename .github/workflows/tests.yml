@@ -18,9 +18,7 @@ jobs:
             coverage: none
 
         - name: Install Composer dependencies
-          run: | 
-            composer install --prefer-dist --no-interaction --no-suggest
-            composer dump-autoload
+          run: composer install --prefer-dist --no-interaction --no-suggest
 
         - name: Execute tests
           run: vendor/bin/phpunit
