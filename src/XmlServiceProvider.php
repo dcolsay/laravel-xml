@@ -12,6 +12,5 @@ class XMLServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-xml');
     }
-
    
 }
