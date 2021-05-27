@@ -7,16 +7,19 @@ use XMLWriter;
 class WriterFactory
 {
 
-    public static function createWriter($type)
+    public static function createWriterFromMemory()
     {
-        // TODO : 
+        $writer = new XMLWriter;
+
+        $writer->openMemory();
+
+        return $writer;
     }
 
     public static function createWriterFromFile($path)
     {
         $writer = new XMLWriter;
         
-        // $writer->openMemory();
         $writer->openUri($path);
 
         return $writer;

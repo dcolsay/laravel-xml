@@ -27,16 +27,7 @@ class WriterTest extends TestCase
         Writer::create($path)
             ->addNode('demo', 'Good')
             ->addNode('demo', 'Good');
-            // ->addRow([
-            //     'first_name' => 'John',
-            //     'last_name' => 'Doe',
-            // ])
-            // ->addRow([
-            //     'first_name' => 'Jane',
-            //     'last_name' => 'Doe',
-            // ]);
 
-        // $this->assertMatchesFileSnapshot($this->pathToCsv);
         $this->assertTrue(true);
     }
 
@@ -72,6 +63,30 @@ class WriterTest extends TestCase
                 ],
 
                 'Good Girl' => 'Laula'
+            ]);
+
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function it_can_write_multi_dimension_array()
+    {
+        $path = $this->temporaryDirectory->path('test_multi_dimension_array.xml');
+        Writer::create($path)
+            ->pretty()
+            ->addNode('demo', [
+                'Good guys' => [
+                    'Guy' => [
+                        ['name' => 'Luke Skywalker', 'weapon' => 'Lightsaber'],
+                        ['name' => 'Captain America', 'weapon' => 'Shield'],
+                    ],
+                ],
+                'Bad guys' => [
+                    'Guy' => [
+                        ['name' => 'Sauron', 'weapon' => 'Evil Eye'],
+                        ['name' => 'Darth Vader', 'weapon' => 'Lightsaber'],
+                    ],
+                ],
             ]);
 
         $this->assertTrue(true);

@@ -2,6 +2,7 @@
 
 namespace Dcolsay\XML\Writer\Concerns;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait HasNode
@@ -31,21 +32,37 @@ trait HasNode
         $this->writer->endElement();
     }
 
-    public function addArrayNode($name, array $values)
+    protected function addArrayNode($name, array $values)
     {
-        $this->writer->startElement($this->slug($name));
+        if(Arr::isAssoc($values)) {
+            $this->addAssocArrayNode($name, $values);
+        } else {
+            $this->addNormalArrayNode($name, $values);
+        }
+    }
+
+    protected function addAssocArrayNode($name, $values)
+    {
+        try {
+            $this->writer->startElement($this->slug($name));
+        } catch (\Throwable $th) {
+            // dd($name, $values);
+            throw $th;
+        }
 
         foreach ($values as $node => $value) {
-            $this->addNode($node, $value);
-            
-            // if(is_string($value))
-            //     $this->addTextNode($node, $value);
 
-            // if(is_array($value))
-            //     $this->addArrayNode($node, $value);
+            $this->addNode($node, $value);
         }
 
         $this->writer->endElement();
+    }
+
+    protected function addNormalArrayNode($name, $values)
+    {
+        foreach ($values as $value) {
+            $this->addNode($name, $value);
+        }
     }
 
     public function slug($element, $delimiter = '_')
