@@ -15,4 +15,40 @@ class ReaderTest extends TestCase
 
         $this->assertEquals(0, $actualCount);
     }
+
+    /** @test */
+    public function it_can_count_rows()
+    {
+        $reader = new Reader($this->getStubPath('Contracts.xml'));
+        
+        
+        $actualCount = $reader->unique('Contract')->getRows()->count();
+
+        $this->assertEquals(1, $actualCount);
+    }
+
+    public function test_unique_method_with_pubmed_xml()
+    {
+        $reader = new Reader($this->getStubPath('pubmed-example.xml'));
+        
+        $actualCount = $reader->unique('PubmedArticle')->getRows()->count();
+
+        // $reader->unique('PubmedArticle')->getRows();
+
+       
+
+        $this->assertEquals(3, $actualCount);
+    }
+
+    public function test_getContainer()
+    {
+        $reader = new Reader($this->getStubPath('Contracts.xml'));
+        
+        
+        $actualCount = $reader->unique('Contract')->getRows()->count();
+
+        $container = $reader->getContainer();
+
+        $this->assertEquals(1, $actualCount);
+    }
 }

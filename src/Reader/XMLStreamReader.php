@@ -4,9 +4,11 @@ namespace Dcolsay\XML\Reader;
 
 use Prewk\XmlStringStreamer;
 use Dcolsay\XML\Data\XMLElement;
+use Illuminate\Support\Arr;
 use Illuminate\Support\LazyCollection;
 use Prewk\XmlStringStreamer\Stream\File;
 use Prewk\XmlStringStreamer\Parser\StringWalker;
+use Prewk\XmlStringStreamer\Parser\UniqueNode;
 
 abstract class XMLStreamReader
 {
@@ -16,6 +18,8 @@ abstract class XMLStreamReader
 
     protected $filePath;
 
+    protected $container;
+
     protected $options = [];
     
     public function __construct($path)
@@ -23,9 +27,20 @@ abstract class XMLStreamReader
         $this->filePath = $path;
     }
 
-    protected function getParser()
+    public function getParser()
     {
-        return new StringWalker($this->options);
+        return (Arr::has($this->options, 'uniqueNode'))
+            ? new UniqueNode($this->options) 
+            : new StringWalker($this->options);
+
+    }
+
+    public function unique(string $node)
+    {
+        $this->options['uniqueNode'] = $node;
+        $this->options['extractContainer'] = true;
+
+        return $this;
     }
 
     public function getStream()
@@ -34,17 +49,23 @@ abstract class XMLStreamReader
         return new File($this->filePath, $this->buffer);
     }
 
-    public function parse($callback)
+    protected function parse($callback)
     {
-        $streamer = $this->getStreamer();
+        $stream = $this->getStream();
+        $parser = $this->getParser();
+        // $streamer = $this->getStreamer();
+        $streamer = new XmlStringStreamer($parser, $stream);
 
-        return LazyCollection::make(function () use ($streamer, $callback) {
-            
+        return LazyCollection::make(function () use ($streamer, $callback, $parser) {
+
             while($node = $streamer->getNode()) {
+
                 $element = new XMLElement($node);
 
                 yield call_user_func($callback, $element, $node);
             }
+
+            $this->container = new XMLElement($parser->getExtractedContainer());
 
         });
 
@@ -81,4 +102,12 @@ abstract class XMLStreamReader
 
     //     return $stream;
     // }
+
+    /**
+     * Get the value of container
+     */ 
+    public function getContainer()
+    {
+        return $this->container;
+    }
 }
