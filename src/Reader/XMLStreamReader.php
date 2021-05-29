@@ -65,7 +65,8 @@ abstract class XMLStreamReader
                 yield call_user_func($callback, $element, $node);
             }
 
-            $this->container = new XMLElement($parser->getExtractedContainer());
+            if($this->canExxtractContainer())
+                $this->container = new XMLElement($parser->getExtractedContainer());
 
         });
 
@@ -81,6 +82,11 @@ abstract class XMLStreamReader
         return $this->parse(function($element){
             return $element;
         });
+    }
+
+    protected function canExxtractContainer()
+    {
+        return Arr::has($this->options, 'extractContainer');
     }
 
     // public function getStream($path, $output)
