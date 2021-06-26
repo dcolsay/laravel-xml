@@ -118,4 +118,54 @@ class WriterTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function test_it_can_save()
+    {
+        $path = $this->temporaryDirectory->path('test_save.xml');
+
+        $values = [
+            'identifer' => '123456',
+            'main' => [
+                [
+                    'id' => 1,
+                    'name' => 'Jane',
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Jane',
+                ],
+            ]
+        ];
+
+        Writer::create($path)
+            ->pretty()
+            ->save($values);
+
+        $this->assertTrue(true);
+    }
+
+    public function test_it_can_save_with_another_root()
+    {
+        $path = $this->temporaryDirectory->path('test_save_with_another_root.xml');
+
+        $values = [
+            'identifer' => '123456',
+            'main' => [
+                [
+                    'id' => 1,
+                    'name' => 'Jane',
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Jane',
+                ],
+            ]
+        ];
+
+        Writer::create($path)
+            ->pretty()
+            ->save($values, 'batch');
+
+        $this->assertTrue(true);
+    }
+
 }

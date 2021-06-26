@@ -60,11 +60,17 @@ class Writer extends XMLWriter
         return $this;
     }
 
-    public function save($values, string $filename = "")
+    public function save($values, $root="", string $filename = "")
     {
-       $this->startElement($this->root);
+    
+        $root = blank($root) ? $this->root : $root;
 
-        dd($this->root);
+       $this->startElement($root);
+
+       foreach($values as $node => $value)
+       {
+           $this->addNode($node, $value);
+       }
 
        $this->endElement();
     }
