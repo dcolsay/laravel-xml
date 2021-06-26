@@ -16,10 +16,12 @@ class Exporter
 
     protected $writer;
 
-    public function __construct($export)
+    public function __construct($export, $file)
     {
         $this->exportable = $export;
-        $this->writer = Writer::make();
+
+        $this->writer = Writer::create($file)->getWriter();
+
     }
 
     public function export()
@@ -68,6 +70,6 @@ class Exporter
     public function save()
     {
         $this->writer->endElement();
-        Storage::append('demo.xml', $this->writer->flush(true));
+        $this->writer->flush(true);
     }
 }
