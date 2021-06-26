@@ -12,6 +12,7 @@ class WriterFactory
         $writer = new XMLWriter;
 
         $writer->openMemory();
+        $writer->startDocument();
 
         return $writer;
     }
@@ -21,6 +22,7 @@ class WriterFactory
         $writer = new XMLWriter;
         
         $writer->openUri($path);
+        $writer->startDocument();
 
         return $writer;
 
