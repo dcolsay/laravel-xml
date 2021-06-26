@@ -27,9 +27,9 @@ trait HasNode
 
     public function addTextNode(string $name, string $value)
     {
-        $this->writer->startElement($this->slug($name));
-        $this->writer->text($value);
-        $this->writer->endElement();
+        $this->startElement($this->slug($name));
+        $this->text($value);
+        $this->endElement();
     }
 
     protected function addArrayNode($name, array $values)
@@ -44,7 +44,7 @@ trait HasNode
     protected function addAssocArrayNode($name, $values)
     {
         try {
-            $this->writer->startElement($this->slug($name));
+            $this->startElement($this->slug($name));
         } catch (\Throwable $th) {
             // dd($name, $values);
             throw $th;
@@ -55,7 +55,7 @@ trait HasNode
             $this->addNode($node, $value);
         }
 
-        $this->writer->endElement();
+        $this->endElement();
     }
 
     protected function addNormalArrayNode($name, $values)

@@ -8,34 +8,36 @@ use Dcolsay\XML\Writer\Concerns\HasNode;
 class Writer extends XMLWriter
 {
     use HasNode;
-    
-    private XMLWriter $writer;
 
     /** @var string Path to the output file */
     protected $path = '';
 
     protected $version = '1.0';
 
+    protected $root = 'root';
+
     public function __construct(string $path)
     {
         $this->path = $path;
 
-        $this->writer = WriterFactory::createWriterFromFile($path);
+        $this->createWriterFromFile($path);
     }
 
     # Creators
 
-    public static function create(string $file, callable $configureWiter = null)
+    protected function createWriterFromFile($path)
     {
-        $writer = new static($file);
+        
+        $this->openUri($path);
+        $this->startDocument();
 
-        $xmlWriter = $writer->getWriter();
+        return $this;
 
-        if($configureWiter) {
-            $configureWiter($xmlWriter);
-        }
+    }
 
-        return $writer;
+    public static function create(string $file)
+    {
+        return new static($file);
     }
 
     # Getters
@@ -53,9 +55,18 @@ class Writer extends XMLWriter
 
     public function pretty()
     {
-        $this->writer->setIndent(true);
+        $this->setIndent(true);
         
         return $this;
+    }
+
+    public function save($values, string $filename = "")
+    {
+       $this->startElement($this->root);
+
+        dd($this->root);
+
+       $this->endElement();
     }
 
 }
